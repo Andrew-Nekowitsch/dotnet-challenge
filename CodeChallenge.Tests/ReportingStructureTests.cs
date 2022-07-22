@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 using CodeChallenge.Models;
 using CodeCodeChallenge.Tests.Integration.Extensions;
@@ -34,7 +35,7 @@ namespace CodeCodeChallenge.Tests.Integration
         }
 
         [TestMethod]
-        public void GetReportingStructure_Returns_Ok()
+        public async Task GetReportingStructure_Returns_Ok()
         {
             // Arrange
             var employeeId = "16a596ae-edd3-4847-99fe-c4518e82c86f";
@@ -42,16 +43,28 @@ namespace CodeCodeChallenge.Tests.Integration
             var expectedLastName = "Lennon";
 
             // Execute
-            var getRequestTask = _httpClient.GetAsync($"api/reportingStructure/{employeeId}");
-            var response = getRequestTask.Result;
+            var response = await _httpClient.GetAsync($"api/reportingStructure/{employeeId}");
+            ReportingStructure reportingStructure = response.DeserializeContent<ReportingStructure>();
 
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
-            ReportingStructure reportingStructure = response.DeserializeContent<ReportingStructure>();
             Assert.AreEqual(expectedFirstName, reportingStructure.Employee.FirstName);
             Assert.AreEqual(expectedLastName, reportingStructure.Employee.LastName);
-			Assert.AreEqual(reportingStructure.NumberOfReports, 4);
-            Console.WriteLine(DateTime.Now);
-		}
-	}
+            Assert.AreEqual(4, reportingStructure.NumberOfReports);
+        }
+
+        [TestMethod]
+        public async Task GetReportingStructure_Returns_NumberOfReports()
+        {
+            // Arrange
+            var employeeId = "16a596ae-edd3-4847-99fe-c4518e82c86f";
+
+            // Execute
+            var response = await _httpClient.GetAsync($"api/reportingStructure/{employeeId}");
+            ReportingStructure reportingStructure = response.DeserializeContent<ReportingStructure>();
+
+            // Assert
+            Assert.AreEqual(4, reportingStructure.NumberOfReports);
+        }
+    }
 }

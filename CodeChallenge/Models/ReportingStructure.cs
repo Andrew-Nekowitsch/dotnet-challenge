@@ -10,13 +10,14 @@
 
 		private int RecursiveCount(Employee employee)
 		{
-			if (employee.DirectReports == null)
-				return 0;
-
-			int count = employee.DirectReports.Count;
-			foreach (Employee e in employee.DirectReports)
+			int count = 0;
+			if (employee.DirectReports != null)
 			{
-				count += RecursiveCount(e);
+				count = employee.DirectReports.Count;
+				foreach (Employee e in employee.DirectReports)
+				{
+					count += RecursiveCount(e);
+				}
 			}
 			return count;
 		}

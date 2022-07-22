@@ -23,9 +23,7 @@ namespace CodeChallenge.Services
 		{
 			if (!String.IsNullOrEmpty(id))
 			{
-				var x = await _employeeRepository.GetById(id);
-				var y = new ReportingStructure() { Employee = x };
-				return y;
+				return new ReportingStructure() { Employee = await _employeeRepository.GetById(id) };
 			}
 
 			return null;

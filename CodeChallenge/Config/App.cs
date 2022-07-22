@@ -19,7 +19,7 @@ namespace CodeChallenge.Config
 
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.UseEmployeeDB();
+            builder.UseCustomDBs();
             
             AddServices(builder.Services);
 
@@ -29,7 +29,7 @@ namespace CodeChallenge.Config
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                SeedEmployeeDB();
+                SeedCustomDBs();
             }
 
             app.UseAuthorization();
@@ -43,16 +43,24 @@ namespace CodeChallenge.Config
         {
 
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<ICompensationService, CompensationService>();
+            services.AddScoped<IReportingStructureService, ReportingStructureService>();
             services.AddScoped<IEmployeeRepository, EmployeeRespository>();
+            services.AddScoped<ICompensationRepository, CompensationRespository>();
 
             services.AddControllers();
         }
 
-        private void SeedEmployeeDB()
+        private void SeedCustomDBs()
         {
             new EmployeeDataSeeder(
                 new EmployeeContext(
                     new DbContextOptionsBuilder<EmployeeContext>().UseInMemoryDatabase("EmployeeDB").Options
+            )).Seed().Wait();
+
+            new CompensationDataSeeder(
+                new CompensationContext(
+                    new DbContextOptionsBuilder<CompensationContext>().UseInMemoryDatabase("CompensationDB").Options
             )).Seed().Wait();
         }
     }
