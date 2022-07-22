@@ -30,11 +30,11 @@ namespace CodeChallenge.Services
             return employee;
         }
 
-        public Employee GetById(string id)
+        public async Task<Employee> GetById(string id)
         {
             if(!String.IsNullOrEmpty(id))
             {
-                return _employeeRepository.GetById(id);
+                return await _employeeRepository.GetById(id);
             }
 
             return null;

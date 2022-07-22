@@ -8,7 +8,7 @@ namespace CodeChallenge.Services
 {
     public interface IEmployeeService
     {
-        Employee GetById(String id);
+        Task<Employee> GetById(String id);
         Employee Create(Employee employee);
         Employee Replace(Employee originalEmployee, Employee newEmployee);
     }

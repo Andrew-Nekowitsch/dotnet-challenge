@@ -27,9 +27,10 @@ namespace CodeChallenge.Repositories
             return employee;
         }
 
-        public Employee GetById(string id)
+        public async Task<Employee> GetById(string id)
         {
-            return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+            IEnumerable<Employee> result = await _employeeContext.Employees.ToListAsync<Employee>();
+            return result.SingleOrDefault(e => e.EmployeeId == id);
         }
 
         public Task SaveAsync()
